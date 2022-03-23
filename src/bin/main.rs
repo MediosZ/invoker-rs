@@ -185,9 +185,6 @@ fn main() {
     args.push("--sysroot".into());
     args.push(sysroot.into());
     args.push("--crate-type=cdylib".into());
-    args.push("-C".into());
-    args.push("link-dead-code".into());
-
     if let Err(_) = run_compiler(&args){
         process::exit(1);
     }
