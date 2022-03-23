@@ -1,7 +1,7 @@
 use std::str;
 use std::env;
 use std::process;
-use invoker::compiler::{ComplingResult, run_compiler};
+use invoker::compiler::{CompilingResult, run_compiler};
 
 fn main()  -> std::result::Result<(), Box<dyn std::error::Error>> {
     println!("testing!");
@@ -23,7 +23,7 @@ fn main()  -> std::result::Result<(), Box<dyn std::error::Error>> {
     args.push("--sysroot".into());
     args.push(sysroot.into());
     args.push("--crate-type=cdylib".into());
-    let mut result = ComplingResult::default();
+    let mut result = CompilingResult::default();
     if let Err(_) = run_compiler("test.rs",
     "tmp/temp.so",
     &mut result,

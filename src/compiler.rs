@@ -159,8 +159,8 @@ pub fn run_compiler(
                             let defid = item.def_id;
                             // dbg!(item);
                             let ty = tcx.type_of(defid);
-                            dbg!(ty);
-                            println!("{}:{:?}",name, ty);
+                            // dbg!(ty);
+                            // println!("{}:{:?}",name, ty);
                             let attrs = tcx.get_attrs(defid.to_def_id());
                             let mut no_mangle = false;
                             let mut export_name:Option<String> = None;

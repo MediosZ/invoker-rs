@@ -39,4 +39,5 @@ fn main() {
         call::<i32>(CodePtr::from_ptr(func), &args)
     };
     println!("!!! {}", result);
+    unsafe{dlclose(lib2);}
 }

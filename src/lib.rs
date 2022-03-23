@@ -9,7 +9,7 @@ extern "C" {
     fn dlsym(handle: *const c_void, name: *const c_char) -> *const c_void;
     fn dlclose(handle: *const c_void);
 }
-use std::{os::raw::{c_char, c_double, c_float, c_int, c_long, c_short}, path::Ancestors};
+use std::os::raw::{c_char, c_double, c_float, c_int, c_long, c_short};
 
 use libffi::high::call::{arg, call, CodePtr, Arg};
 use std::path::Path;
@@ -76,14 +76,11 @@ impl From<c_double> for Any {
         Any::Double(val)
     }
 }
-
 impl Default for Any {
     fn default() -> Self {
         Any::Null
     }
 }
-
-use libloading::{Library, Symbol};
 
 pub mod compiler;
 use compiler::{CompilingResult, compile};
@@ -122,6 +119,10 @@ impl Invoker{
         println!("load {s}");
         if !Path::new(s).exists() {
             println!("{} doesn't exist", s);
+            return;
+        }
+        if self.lib.is_some() {
+            println!("Already load a lib, please unload first");
             return;
         }
         self.lib_path = "tmp/temp.so".to_string();
@@ -202,6 +203,12 @@ impl Invoker{
                         Any::Long(_) => unsafe {Any::from(call::<i64>(CodePtr::from_ptr(func), &ffiargs))},
                         Any::Float(_) => unsafe {Any::from(call::<f32>(CodePtr::from_ptr(func), &ffiargs))},
                         Any::Double(_) => unsafe {Any::from(call::<f64>(CodePtr::from_ptr(func), &ffiargs))},
+                        Any::Null => {
+                            unsafe {
+                                call::<()>(CodePtr::from_ptr(func), &ffiargs);
+                            }
+                            Any::Null
+                        },
                         _ => todo!()
                     };
                     // let result = unsafe {call::<i32>(CodePtr::from_ptr(func), &ffiargs)};
@@ -223,6 +230,7 @@ impl Invoker{
             println!("no compile result to unload");
         }
         if self.lib.is_some() {
+            unsafe{ dlclose(self.lib.unwrap()); }
             self.lib = None;
         }
         else{

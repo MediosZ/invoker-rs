@@ -1,15 +1,8 @@
 use std::str;
-use invoker::Any;
-// use invoker::{add2};
-use invoker::{double_input, add2};
-use libloading::Error;
 use libloading::{Library, Symbol};
 use trans::{py, eval};
 use cstr::cstr;
-pub use abi::interface as abi_interface;
-
 use std::{ffi::c_void, ffi::CString, os::raw::c_int, os::raw::c_char};
-use libffi::middle::*;
 
 #[link(name = "dl")]
 extern "C" {
@@ -122,8 +115,6 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>>{
         }
         let res = call::<i32, _>(lib2, "add1", 13);
         println!("{:?}", res);
-        println!("{}", double_input(123));
-        println!("{}", add2(123));
 
         // let func_name = CString::new("add1").unwrap();
         // let func = unsafe { dlsym(lib2, func_name.as_ptr()) };

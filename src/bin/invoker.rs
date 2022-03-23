@@ -39,6 +39,7 @@ fn process(invoker: &mut Invoker, line: String) -> bool{
 }
 
 fn main() {
+    println!("Load rust scripts");
     // `()` can be used when no completer is required
     let mut rl = Editor::<()>::new();
     let mut invoker = Invoker::default();
